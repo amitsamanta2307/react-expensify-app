@@ -11,9 +11,7 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 module.exports = {
-    entry: {
-        app: './src/app.js',
-    },
+    entry: ['babel-polyfill', './src/app.js'],
     plugins: [
         new MiniCssExtractPlugin({
             filename: 'styles.css'
@@ -32,28 +30,35 @@ module.exports = {
         filename: 'bundle.js',
     },
     module: {
-        rules: [{
-            loader: 'babel-loader',
-            test: /\.js$/,
-            exclude: /node_modules/
-        }, {
-            use: [
-                MiniCssExtractPlugin.loader,
-                {
-                    loader: "css-loader",
-                    options: {
-                        sourceMap: true
-                    }
-                },
-                {
-                    loader: "sass-loader",
-                    options: {
-                        sourceMap: true
-                    }
-                },
-            ],
-            test: /\.s?css$/
-        }]
+        rules: [
+            {
+                loader: 'babel-loader',
+                test: /\.js$/,
+                exclude: /node_modules/
+            },
+            {
+                test: /\.s?css$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: "css-loader",
+                        options: {
+                            sourceMap: true
+                        }
+                    },
+                    {
+                        loader: "sass-loader",
+                        options: {
+                            sourceMap: true
+                        }
+                    },
+                ],
+            },
+            {
+                test: /\.(jpe?g|png|gif)$/i,
+                loader: 'url-loader'
+            }
+        ]
     }
 };
 
